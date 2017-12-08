@@ -17,7 +17,7 @@ class QueueTimeCalculator {
             queueTime += minQueueTime
 
             tills.forEach { it ->
-                it.progress(minQueueTime)
+                it.advance(minQueueTime)
                 if (it.waitingTime == 0 && !deque.isEmpty()) it.waitingTime = deque.remove()
             }
         } while (!deque.isEmpty())
@@ -32,7 +32,7 @@ class QueueTimeCalculator {
     }
 
     private data class SelfCheckoutTill(var waitingTime: Int = 0) {
-        fun progress(value: Int) {
+        fun advance(value: Int) {
             waitingTime -= value
         }
     }
