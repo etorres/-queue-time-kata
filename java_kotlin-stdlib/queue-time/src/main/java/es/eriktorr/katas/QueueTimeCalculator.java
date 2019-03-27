@@ -1,23 +1,31 @@
 package es.eriktorr.katas;
 
 import kotlin.Unit;
-import kotlin.ranges.IntRange;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
 
+import static java.util.Objects.requireNonNull;
 import static kotlin.collections.CollectionsKt.*;
+import static kotlin.sequences.SequencesKt.asIterable;
+import static kotlin.sequences.SequencesKt.generateSequence;
 
 class QueueTimeCalculator {
 
     int queueTime(List<Integer> queue, int tillsCount) {
         Deque<Integer> deque = new ArrayDeque<>(queue);
-        List<SelfCheckoutTill> tills = mapTo(new IntRange(0, tillsCount - 1), new ArrayList<>(), i -> aSelfCheckoutTill(deque));
+        List<SelfCheckoutTill> tills = mapTo(
+                take(asIterable(generateSequence(0, i -> i + 1)), tillsCount),
+                new ArrayList<>(),
+                i -> aSelfCheckoutTill(deque)
+        );
 
         int queueTime = 0;
 
         do {
-            List<Integer> waitingTimes = mapTo(tills, new ArrayList<>(), SelfCheckoutTill::waitingTime);
-            int minQueueTime = Optional.ofNullable(min(waitingTimes)).orElse(0);
+            int minQueueTime = requireNonNull(minBy(tills, SelfCheckoutTill::waitingTime)).waitingTime;
             queueTime += minQueueTime;
 
             forEach(tills, till -> {
@@ -27,8 +35,7 @@ class QueueTimeCalculator {
             });
         } while (!deque.isEmpty());
 
-        List<Integer> remainingWaitingTimes = mapTo(tills, new ArrayList<>(), SelfCheckoutTill::waitingTime);
-        queueTime += Optional.ofNullable(max(remainingWaitingTimes)).orElse(0);
+        queueTime += requireNonNull(maxBy(tills, SelfCheckoutTill::waitingTime)).waitingTime;
 
         return queueTime;
     }
