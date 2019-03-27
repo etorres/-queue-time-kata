@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @RunWith(JUnitPlatform.class)
-public class QueueTimeCalculatorTest {
+class QueueTimeCalculatorTest {
 
     private QueueTimeCalculator queueTimeCalculator = new QueueTimeCalculator();
 

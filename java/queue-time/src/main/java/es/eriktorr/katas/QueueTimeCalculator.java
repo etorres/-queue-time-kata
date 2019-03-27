@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class QueueTimeCalculator {
+class QueueTimeCalculator {
 
-    public int queueTime(List<Integer> queue, int tillsCount) {
+    int queueTime(List<Integer> queue, int tillsCount) {
         Deque<Integer> deque = new ArrayDeque<>(queue);
         List<SelfCheckoutTill> tills = IntStream.range(0, tillsCount)
                 .mapToObj(i -> aSelfCheckoutTill(deque))
